@@ -52,9 +52,23 @@ namespace backend_issue_nest.Controllers
 
         [Route("")]
         [HttpPut]
-        public IActionResult PutTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> PutTicket([FromBody] Ticket ticket)
         {
-            return null;
+            Response response = null;
+
+            try
+            {
+                Ticket res = await _ticketRepository.UpdateTicket(ticket);
+
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
+
+                return JSONResponse(response);
+            }
+            catch (Exception ex)
+            {
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status500InternalServerError, null, ex);
+                return JSONResponse(response);
+            }
         }
 
         [Route("")]
