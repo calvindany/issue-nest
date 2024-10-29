@@ -73,9 +73,23 @@ namespace backend_issue_nest.Controllers
 
         [Route("")]
         [HttpDelete]
-        public IActionResult DeleteTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> DeleteTicket(int ticket_id)
         {
-            return null;
+            Response response = null;
+            try
+            {
+                await _ticketRepository.DeleteTicket(ticket_id);
+
+                response = ResponseHelper.GenerateResponseData("Success delete ticket with id: " + ticket_id, StatusCodes.Status200OK, null, null);
+
+                return JSONResponse(response);
+            }
+            catch (Exception ex)
+            {
+                response = ResponseHelper.GenerateResponseData("Internal Server Error", StatusCodes.Status500InternalServerError, null, ex);
+
+                return JSONResponse(response);
+            }
         }
 
         private IActionResult JSONResponse(Response responseData)

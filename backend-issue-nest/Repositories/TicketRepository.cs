@@ -150,5 +150,30 @@ namespace backend_issue_nest.Repositories
                 throw;
             }
         }
+
+        public async Task<int> DeleteTicket(int id)
+        {
+            try
+            {
+                string query = "DELETE FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets";
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand cmd  = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@pk_tr_tickets", id);
+
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return id;
+                    }
+                }
+            } 
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
