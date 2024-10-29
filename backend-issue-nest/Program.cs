@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<TicketRepository>();
+builder.Services.AddScoped<UserRepositories>();
 
 
 var app = builder.Build();
