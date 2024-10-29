@@ -30,9 +30,24 @@ namespace backend_issue_nest.Controllers
 
         [Route("")]
         [HttpPost]
-        public IActionResult PostTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
         {
-            return null;
+            Response response = null;
+
+            try
+            {
+                Ticket res = await _ticketRepository.CreateTicket(ticket);
+
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, ticket, null);
+
+                return JSONResponse(response);
+            } 
+            catch (Exception ex)
+            {
+                response = ResponseHelper.GenerateResponseData("Internal Server Error", StatusCodes.Status500InternalServerError, null, ex);
+
+                return JSONResponse(response);
+            }
         }
 
         [Route("")]

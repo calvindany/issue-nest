@@ -62,5 +62,36 @@ namespace backend_issue_nest.Repositories
             }
             
         }
+
+        public async Task<Ticket> CreateTicket(Ticket ticket)
+        {
+            try
+            {
+                string query = "INSERT INTO tr_tickets (title, description, status, client_id) " +
+                    "VALUES " +
+                    "(@title, @description, @status, @client_id)";
+
+                using(SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@title", ticket.title);
+                        command.Parameters.AddWithValue("@description", ticket.description);
+                        command.Parameters.AddWithValue("@status", ticket.status);
+                        command.Parameters.AddWithValue("@client_id", ticket.client_id);
+
+                        await command.ExecuteNonQueryAsync();
+
+                        return ticket;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
