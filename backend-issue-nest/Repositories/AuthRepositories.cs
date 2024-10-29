@@ -1,0 +1,67 @@
+﻿using backend_issue_nest.Models;
+using backend_issue_nest.Repositories.Services;
+using System.Data.SqlClient;
+
+namespace backend_issue_nest.Repositories
+{
+    public class AuthRepositories
+    {
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+        public AuthRepositories(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
+        }
+
+        private T GetValueOrDefault<T>(object value, T defaultValue = default)
+        {
+            return value != DBNull.Value ? (T)value : defaultValue;
+        }
+
+        public async Task<User> Login(string email, string password)
+        {
+            string query = "SELECT * FROM ms_users WHERE email = @email";
+            User loggedUser = null;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@email", email);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        await reader.ReadAsync();
+                        loggedUser = new User
+                        {
+                            id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
+                            name = GetValueOrDefault<string>(reader["name"], string.Empty),
+                            email = GetValueOrDefault<string>(reader["email"], string.Empty),
+                            role = GetValueOrDefault<string>(reader["role"], string.Empty),
+                            password = GetValueOrDefault<string>(reader["password"], string.Empty)
+                        };
+
+                        if(loggedUser.id ==0)
+                        {
+                            return null;
+                        }
+
+                        PasswordService ps = new PasswordService();
+                        if(ps.VerifyPassword(loggedUser.password, password))
+                        {
+                            return loggedUser;
+                        }
+
+                        return null;
+
+                    }
+                }
+            }
+            return new User();
+        }
+    }
+}
