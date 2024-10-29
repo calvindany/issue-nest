@@ -28,6 +28,27 @@ namespace backend_issue_nest.Controllers
             return JSONResponse(response);
         }
 
+        [Route("")]
+        [HttpPost]
+        public IActionResult PostTicket([FromBody] Ticket ticket)
+        {
+            return null;
+        }
+
+        [Route("")]
+        [HttpPut]
+        public IActionResult PutTicket([FromBody] Ticket ticket)
+        {
+            return null;
+        }
+
+        [Route("")]
+        [HttpDelete]
+        public IActionResult DeleteTicket([FromBody] Ticket ticket)
+        {
+            return null;
+        }
+
         private IActionResult JSONResponse(Response responseData)
         {
             if (responseData.status_code != 200)
