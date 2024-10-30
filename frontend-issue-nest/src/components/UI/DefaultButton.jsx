@@ -1,9 +1,15 @@
 import { Button } from "@mui/material";
-export default function DefaultButton({ variant, type, onclick, children }) {
+export default function DefaultButton({
+  variant,
+  type,
+  onclick,
+  bgColor,
+  children,
+}) {
   const style = {};
 
   if (type == "primary") {
-    style.backgroundColor = "#091540";
+    style.backgroundColor = bgColor ? bgColor : "#091540";
   }
   return (
     <>
