@@ -94,9 +94,9 @@ namespace backend_issue_nest.Controllers
         }
 
         [Authorize(Policy = "NormalAuthentication")]
-        [Route("")]
+        [Route("{id}")]
         [HttpPut]
-        public async Task<IActionResult> PutTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> PutTicket([FromBody] Ticket ticket, int id)
         {
             Response response = null;
             ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -115,7 +115,22 @@ namespace backend_issue_nest.Controllers
 
             try
             {
-                Ticket res = await _ticketRepository.UpdateTicket(ticket, user_id, role);
+                ticket.Id = id;
+
+                bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
+                bool isAdmin = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_ADMIN];
+
+                Ticket res = null;
+
+                if (isClient)
+                {
+                    res = await _ticketRepository.UpdateTicket(ticket, user_id, role);
+                } 
+                else if(isAdmin)
+                {
+                    res = await _ticketRepository.UpdateResponseTicket(ticket, user_id, role);
+                }
+
 
                 response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
 

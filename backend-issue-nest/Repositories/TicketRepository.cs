@@ -78,6 +78,9 @@ namespace backend_issue_nest.Repositories
         {
             try
             {
+                DateTime now = DateTime.Now;
+                ticket.created_at = now;
+
                 string query = "INSERT INTO tr_tickets (title, description, status, client_id, created_at) " +
                     "VALUES " +
                     "(@title, @description, @status, @client_id, @created_at)";
@@ -92,7 +95,7 @@ namespace backend_issue_nest.Repositories
                         command.Parameters.AddWithValue("@description", ticket.description);
                         command.Parameters.AddWithValue("@status", ticket.status);
                         command.Parameters.AddWithValue("@client_id", user_id);
-                        command.Parameters.AddWithValue("@created_at", DateTime.Now);
+                        command.Parameters.AddWithValue("@created_at", now);
 
                         await command.ExecuteNonQueryAsync();
 
@@ -115,7 +118,8 @@ namespace backend_issue_nest.Repositories
                 string query = "UPDATE tr_tickets SET " +
                     "title = @title," +
                     "description = @description," +
-                    "status = @status " +
+                    "status = @status," +
+                    "updated_at = @updated_at " +
                     "WHERE pk_tr_tickets = @pk_tr_tickets";
 
                 bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
@@ -146,6 +150,61 @@ namespace backend_issue_nest.Repositories
                         cmd.Parameters.AddWithValue("@description", ticket.description);
                         cmd.Parameters.AddWithValue("@status", ticket.status);
                         cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
+                        cmd.Parameters.AddWithValue("@updated_at", DateTime.Now);
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+
+                    query = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets ";
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            await reader.ReadAsync();
+                            updatedTicket = new Ticket
+                            {
+                                Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
+                                title = GetValueOrDefault<string>(reader["title"], string.Empty),
+                                description = GetValueOrDefault<string>(reader["description"], string.Empty),
+                                status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                client_id = GetValueOrDefault<int>(reader["client_id"], 0),
+                                admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
+                                created_at = GetValueOrDefault<DateTime>(reader["created_at"], DateTime.MinValue),
+                                updated_at = GetValueOrDefault<DateTime>(reader["updated_at"], DateTime.MinValue)
+                            };
+
+                            return updatedTicket;
+                        }
+                    }
+                }
+            } 
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Ticket> UpdateResponseTicket(Ticket ticket, string user_id, string role)
+        {
+            try
+            {
+                Ticket updatedTicket = null;
+                string getTickets = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets ";
+                string query = "UPDATE tr_tickets SET " +
+                    "admin_response = @admin_response, updated_at = @updated_at " +
+                    "WHERE pk_tr_tickets = @pk_tr_tickets";
+
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@admin_response", ticket.admin_response);
+                        cmd.Parameters.AddWithValue("@updated_at", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
 
                         await cmd.ExecuteNonQueryAsync();
                     }
@@ -173,10 +232,10 @@ namespace backend_issue_nest.Repositories
                         }
                     }
                 }
-            } 
+            }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

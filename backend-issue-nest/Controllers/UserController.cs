@@ -43,7 +43,7 @@ namespace backend_issue_nest.Controllers
             }
         }
 
-        [Authorize(Policy = "AdminAuthentication")]
+        //[Authorize(Policy = "AdminAuthentication")]
         [Route("")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
