@@ -61,7 +61,12 @@ export default function Tickets() {
           >
             Edit
           </DefaultButton>
-          <DefaultButton variant="contained" type="primary" bgColor="#FF0000">
+          <DefaultButton
+            variant="contained"
+            type="primary"
+            bgColor="#FF0000"
+            onclick={() => handleSubmitDeleteModal(data.id)}
+          >
             Delete
           </DefaultButton>
         </div>
@@ -98,6 +103,24 @@ export default function Tickets() {
       )
       .then((res) => {
         console.log(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSubmitDeleteModal = (id) => {
+    const token = userLocalStorage.getItem("token");
+
+    axios
+      .delete(`${import.meta.env.VITE_API_BASE_URL}/ticket/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        getTicketsData();
       })
       .catch((err) => {
         console.log(err);
