@@ -1,6 +1,7 @@
 ﻿using backend_issue_nest.Controllers.Helper;
 using backend_issue_nest.Models;
 using backend_issue_nest.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +23,7 @@ namespace backend_issue_nest.Controllers
             _configuration = configuration;
         }
 
-
+        [AllowAnonymous]
         [Route("")]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest user) 
@@ -48,13 +49,14 @@ namespace backend_issue_nest.Controllers
                     new Claim("email", loggedUser.email),
                     new Claim("name", loggedUser.name),
                     new Claim("role", loggedUser.role),
+                    new Claim("role2", loggedUser.role),
                 };
 
                 SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
                 SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                JwtSecurityToken token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Issuer"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
+                JwtSecurityToken token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
 
                 string generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
 

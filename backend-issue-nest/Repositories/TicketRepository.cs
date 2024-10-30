@@ -20,20 +20,31 @@ namespace backend_issue_nest.Repositories
         }
 
 
-        public List<Ticket> GetTicket()
+        public List<Ticket> GetTicket(string user_id, string role)
         {
             List<Ticket> tickets = new List<Ticket>();
-
+            bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
+            bool isAdmin = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_ADMIN];
 
             try
             {
                 string query = "SELECT * FROM tr_tickets";
 
+                if(isClient)
+                {
+                    query += " WHERE client_id = @client_id";
+                }
+
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
+                    connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        connection.Open();
+                        if(isClient)
+                        {
+                            command.Parameters.AddWithValue("@client_id", user_id);
+                        }
+
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -63,13 +74,13 @@ namespace backend_issue_nest.Repositories
             
         }
 
-        public async Task<Ticket> CreateTicket(Ticket ticket)
+        public async Task<Ticket> CreateTicket(Ticket ticket, string user_id)
         {
             try
             {
-                string query = "INSERT INTO tr_tickets (title, description, status, client_id) " +
+                string query = "INSERT INTO tr_tickets (title, description, status, client_id, created_at) " +
                     "VALUES " +
-                    "(@title, @description, @status, @client_id)";
+                    "(@title, @description, @status, @client_id, @created_at)";
 
                 using(SqlConnection connection = new SqlConnection(_connectionString))
                 {
@@ -80,7 +91,8 @@ namespace backend_issue_nest.Repositories
                         command.Parameters.AddWithValue("@title", ticket.title);
                         command.Parameters.AddWithValue("@description", ticket.description);
                         command.Parameters.AddWithValue("@status", ticket.status);
-                        command.Parameters.AddWithValue("@client_id", ticket.client_id);
+                        command.Parameters.AddWithValue("@client_id", user_id);
+                        command.Parameters.AddWithValue("@created_at", DateTime.Now);
 
                         await command.ExecuteNonQueryAsync();
 
@@ -94,21 +106,40 @@ namespace backend_issue_nest.Repositories
             }
         }
 
-        public async Task<Ticket> UpdateTicket(Ticket ticket)
+        public async Task<Ticket> UpdateTicket(Ticket ticket, string user_id, string role)
         {
             try
             {
                 Ticket updatedTicket = null;
+                string getTickets = "SELECT client_id FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets ";
                 string query = "UPDATE tr_tickets SET " +
                     "title = @title," +
                     "description = @description," +
                     "status = @status " +
                     "WHERE pk_tr_tickets = @pk_tr_tickets";
 
+                bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
+
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    
+
+                    if(isClient)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(getTickets, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
+
+                            object? temp = await cmd.ExecuteScalarAsync();
+                            int client_id = (int)temp;
+
+                            if (client_id != Convert.ToInt32(user_id))
+                            {
+                                return null;
+                            }
+                        }
+                    }
+
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@title", ticket.title);
@@ -119,9 +150,7 @@ namespace backend_issue_nest.Repositories
                         await cmd.ExecuteNonQueryAsync();
                     }
 
-                    query = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets";
-
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(getTickets, connection))
                     {
                         cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
 

@@ -1,6 +1,7 @@
 ﻿using backend_issue_nest.Controllers.Helper;
 using backend_issue_nest.Models;
 using backend_issue_nest.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,7 @@ namespace backend_issue_nest.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminAuthentication")]
         [Route("")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)

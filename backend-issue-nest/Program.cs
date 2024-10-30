@@ -40,7 +40,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("NormalAuthentication",
+         policy => policy.RequireRole("Admin", "Client"));
+
+    options.AddPolicy("AdminAuthentication",
+         policy => policy.RequireRole("Admin"));
+
+    options.AddPolicy("UserAuthentication",
+         policy => policy.RequireRole("Client"));
+});
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -51,7 +64,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Register the middleware
+//app.UseMiddleware<AccessControlMiddleware>();
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 

@@ -7,7 +7,7 @@ CREATE TABLE ms_users (
 	pk_ms_user INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	name VARCHAR(100) NOT NULL,
 	email VARCHAR(60) NOT NULL,
-	role VARCHAR(20) CHECK (role IN ('Admin', 'User')) NOT NULL,
+	role VARCHAR(20) CHECK (role IN ('Admin', 'Client')) NOT NULL,
 	password TEXT NOT NULL,
 	
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -29,11 +29,11 @@ CREATE TABLE tr_tickets (
 -- Step 3 Seed Dummy Data for ms_users and tr_tickets
 INSERT INTO ms_users (name, email, role, password, created_at)
 VALUES 
-('Alice Johnson', 'alice@example.com', 'User', 'password123', DEFAULT),
-('Bob Smith', 'bob@example.com', 'User', 'password123', DEFAULT),
-('Charlie Brown', 'bob@example.com', 'User', 'password123', DEFAULT),
-('Dana White', 'dana@example.com', 'User', 'password123', DEFAULT),
-('Eva Green', 'eva@example.com', 'User', 'password123', DEFAULT),
+('Alice Johnson', 'alice@example.com', 'Client', 'password123', DEFAULT),
+('Bob Smith', 'bob@example.com', 'Client', 'password123', DEFAULT),
+('Charlie Brown', 'bob@example.com', 'Client', 'password123', DEFAULT),
+('Dana White', 'dana@example.com', 'Client', 'password123', DEFAULT),
+('Eva Green', 'eva@example.com', 'Client', 'password123', DEFAULT),
 ('Frank Knight', 'frank@example.com', 'Admin', 'password123', DEFAULT);
 
 INSERT INTO tr_tickets (title, description, status, client_id, admin_response, created_at, updated_at)
