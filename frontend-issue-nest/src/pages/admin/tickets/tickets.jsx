@@ -103,6 +103,7 @@ export default function Tickets() {
       )
       .then((res) => {
         console.log(res.data.result);
+        getTicketsData();
       })
       .catch((err) => {
         console.log(err);
