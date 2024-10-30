@@ -129,7 +129,7 @@ namespace backend_issue_nest.Controllers
             }
         }
 
-        [Authorize(Policy = "NormalAuthentication")]
+        [Authorize(Policy = "UserAuthentication")]
         [Route("{id}")]
         [HttpPut]
         public async Task<IActionResult> PutTicket([FromBody] Ticket ticket, int id)
@@ -166,7 +166,7 @@ namespace backend_issue_nest.Controllers
             }
         }
 
-        [Authorize(Policy = "NormalAuthentication")]
+        [Authorize(Policy = "AdminAuthentication")]
         [Route("{id}/response")]
         [HttpPut]
         public async Task<IActionResult> PutTicketResponse([FromBody] Ticket ticket, int id)
@@ -203,17 +203,17 @@ namespace backend_issue_nest.Controllers
             }
         }
 
-        [Authorize(Policy = "NormalAuthentication")]
-        [Route("")]
+        [Authorize(Policy = "AdminAuthentication")]
+        [Route("{id}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteTicket(int ticket_id)
+        public async Task<IActionResult> DeleteTicket(int id)
         {
             Response response = null;
             try
             {
-                await _ticketRepository.DeleteTicket(ticket_id);
+                await _ticketRepository.DeleteTicket(id);
 
-                response = ResponseHelper.GenerateResponseData("Success delete ticket with id: " + ticket_id, StatusCodes.Status200OK, null, null);
+                response = ResponseHelper.GenerateResponseData("Success delete ticket with id: " + id, StatusCodes.Status200OK, null, null);
 
                 return JSONResponse(response);
             }
