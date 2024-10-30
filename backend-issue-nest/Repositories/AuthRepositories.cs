@@ -22,46 +22,56 @@ namespace backend_issue_nest.Repositories
 
         public async Task<User> Login(string email, string password)
         {
-            string query = "SELECT * FROM ms_users WHERE email = @email";
-            User loggedUser = null;
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
+                string query = "SELECT * FROM ms_users WHERE email = @email";
+                User loggedUser = null;
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@email", email);
+                    await connection.OpenAsync();
 
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        await reader.ReadAsync();
-                        loggedUser = new User
-                        {
-                            id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
-                            name = GetValueOrDefault<string>(reader["name"], string.Empty),
-                            email = GetValueOrDefault<string>(reader["email"], string.Empty),
-                            role = GetValueOrDefault<string>(reader["role"], string.Empty),
-                            password = GetValueOrDefault<string>(reader["password"], string.Empty)
-                        };
+                        command.Parameters.AddWithValue("@email", email);
 
-                        if(loggedUser.id ==0)
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
+                            if(await reader.ReadAsync())
+                            {
+                                loggedUser = new User
+                                {
+                                    id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
+                                    name = GetValueOrDefault<string>(reader["name"], string.Empty),
+                                    email = GetValueOrDefault<string>(reader["email"], string.Empty),
+                                    role = GetValueOrDefault<string>(reader["role"], string.Empty),
+                                    password = GetValueOrDefault<string>(reader["password"], string.Empty)
+                                };
+
+                                if(loggedUser.id ==0)
+                                {
+                                    return null;
+                                }
+
+                                PasswordService ps = new PasswordService();
+                                if(ps.VerifyPassword(loggedUser.password, password))
+                                {
+                                    return loggedUser;
+                                }
+
+                                return null;
+                            } 
+
                             return null;
+
                         }
-
-                        PasswordService ps = new PasswordService();
-                        if(ps.VerifyPassword(loggedUser.password, password))
-                        {
-                            return loggedUser;
-                        }
-
-                        return null;
-
                     }
                 }
             }
-            return new User();
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
         }
     }
 }
