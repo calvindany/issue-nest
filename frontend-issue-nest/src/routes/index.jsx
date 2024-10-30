@@ -42,6 +42,26 @@ const routers = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/client",
+    children: [
+      {
+        async lazy() {
+          const { ClientLayout } = await import("../components");
+          return { Component: ClientLayout };
+        },
+        children: [
+          {
+            path: "tickets",
+            async lazy() {
+              const { Tickets } = await import("../pages/client");
+              return { Component: Tickets };
+            },
+          },
+        ],
+      },
+    ],
+  },
 ]);
 
 export default routers;

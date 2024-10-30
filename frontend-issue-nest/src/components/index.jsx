@@ -1,4 +1,5 @@
 export { default as DefaultLayout } from "./Layout/DefaultLayout";
+export { default as ClientLayout } from "./Layout/ClientLayout";
 export { default as AdminLayout } from "./Layout/AdminLayout";
 
 export { default as PasswordField } from "./UI/PasswordField";

@@ -19,8 +19,13 @@ export default function Login() {
     axios
       .post(`${import.meta.env.VITE_API_BASE_URL}/auth`, requestBody)
       .then((res) => {
-        userLocalStorage.save(res.data.result);
-        navigate("/admin/tickets");
+        const data = res.data.result;
+        userLocalStorage.save(data);
+        if (data.role == "Admin") {
+          navigate("/admin/tickets");
+        } else if (data.role == "Client") {
+          navigate("/client/tickets");
+        }
       })
       .catch((err) => {
         console.log(err);
