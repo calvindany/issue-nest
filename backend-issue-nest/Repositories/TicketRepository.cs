@@ -28,7 +28,7 @@ namespace backend_issue_nest.Repositories
 
             try
             {
-                string query = "SELECT * FROM tr_tickets";
+                string query = "SELECT * FROM tr_tickets JOIN ms_users ON tr_tickets.client_id = ms_users.pk_ms_user";
 
                 if(isClient)
                 {
@@ -84,6 +84,7 @@ namespace backend_issue_nest.Repositories
                                     description = GetValueOrDefault<string>(reader["description"], string.Empty),
                                     status = GetValueOrDefault<string>(reader["status"], string.Empty),
                                     client_id = GetValueOrDefault<int>(reader["client_id"], 0),
+                                    client_name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                     admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
                                     created_at = GetValueOrDefault<DateTime>(reader["created_at"], DateTime.MinValue),
                                     updated_at = GetValueOrDefault<DateTime>(reader["updated_at"], DateTime.MinValue)

@@ -7,6 +7,7 @@
         public string? description { get; set; }
         public string? status { get; set; }
         public int? client_id { get; set; }
+        public string? client_name { get; set; }
         public string? admin_response {  get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set;}
