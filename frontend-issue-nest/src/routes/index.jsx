@@ -22,6 +22,26 @@ const routers = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+    children: [
+      {
+        async lazy() {
+          const { AdminLayout } = await import("../components");
+          return { Component: AdminLayout };
+        },
+        children: [
+          {
+            path: "tickets",
+            async lazy() {
+              const { Tickets } = await import("../pages/admin");
+              return { Component: Tickets };
+            },
+          },
+        ],
+      },
+    ],
+  },
 ]);
 
 export default routers;

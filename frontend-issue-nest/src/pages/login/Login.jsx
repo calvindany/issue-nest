@@ -1,12 +1,15 @@
 import * as React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField } from "@mui/material";
 
+import { userLocalStorage } from "../../helpers";
 import { PasswordField, DefaultButton } from "../../components";
 
 export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     const requestBody = {
@@ -16,7 +19,8 @@ export default function Login() {
     axios
       .post(`${import.meta.env.VITE_API_BASE_URL}/auth`, requestBody)
       .then((res) => {
-        console.log(res.data);
+        userLocalStorage.save(res.data.result);
+        navigate("/admin/tickets");
       })
       .catch((err) => {
         console.log(err);
