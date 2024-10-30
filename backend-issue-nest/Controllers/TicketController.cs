@@ -42,7 +42,43 @@ namespace backend_issue_nest.Controllers
 
             try
             {
-                List<Ticket> tickets = _ticketRepository.GetTicket(user_id, role);
+                List<Ticket> tickets = _ticketRepository.GetTicket(null, user_id, role);
+
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, tickets, null);
+
+                return JSONResponse(response);
+            }
+            catch (Exception ex)
+            {
+                response = ResponseHelper.GenerateResponseData("Internal Server Error", StatusCodes.Status500InternalServerError, null, ex);
+
+                return JSONResponse(response);
+            }
+        }
+
+        [Authorize(Policy = "NormalAuthentication")]
+        [Route("{id}")]
+        [HttpGet]
+        public IActionResult GetTickets(int id)
+        {
+            Response response = null;
+            string user_id = "";
+            string role = "";
+            ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null && identity.FindFirst("id") != null)
+            {
+                user_id = identity.FindFirst("id").Value;
+            }
+
+            if (identity != null && identity.FindFirst(ClaimTypes.Role) != null)
+            {
+                role = identity.FindFirst(ClaimTypes.Role).Value;
+            }
+
+            try
+            {
+                List<Ticket> tickets = _ticketRepository.GetTicket(Convert.ToString(id), user_id, role);
 
                 response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, tickets, null);
 

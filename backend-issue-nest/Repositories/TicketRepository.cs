@@ -20,7 +20,7 @@ namespace backend_issue_nest.Repositories
         }
 
 
-        public List<Ticket> GetTicket(string user_id, string role)
+        public List<Ticket> GetTicket(string pk_tr_tickets, string user_id, string role)
         {
             List<Ticket> tickets = new List<Ticket>();
             bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
@@ -33,6 +33,20 @@ namespace backend_issue_nest.Repositories
                 if(isClient)
                 {
                     query += " WHERE client_id = @client_id";
+
+                    // For Get DEtail By ID Options
+                    if (pk_tr_tickets != null)
+                    {
+                        query += " AND pk_tr_tickets = @pk_tr_tickets";
+                    }
+                } 
+                else
+                {
+                    // For Get DEtail By ID Options
+                    if (pk_tr_tickets != null)
+                    {
+                        query += " WHERE pk_tr_tickets = @pk_tr_tickets";
+                    }
                 }
 
                 using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -43,6 +57,20 @@ namespace backend_issue_nest.Repositories
                         if(isClient)
                         {
                             command.Parameters.AddWithValue("@client_id", user_id);
+
+                            // For Get DEtail By ID Options
+                            if (pk_tr_tickets != null)
+                            {
+                                command.Parameters.AddWithValue("@pk_tr_tickets", pk_tr_tickets);
+                            }
+                        }
+                        else
+                        {
+                            // For Get DEtail By ID Options
+                            if (pk_tr_tickets != null)
+                            {
+                                command.Parameters.AddWithValue("@pk_tr_tickets", pk_tr_tickets);
+                            }
                         }
 
                         using (SqlDataReader reader = command.ExecuteReader())
