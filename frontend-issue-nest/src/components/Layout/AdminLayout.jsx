@@ -12,6 +12,7 @@ export default function AdninLayout() {
     const isAdmin = userLocalStorage.getItem("role") == "Admin";
 
     if (!isAdmin) {
+      userLocalStorage.remove();
       navigate("/");
     }
   }, []);

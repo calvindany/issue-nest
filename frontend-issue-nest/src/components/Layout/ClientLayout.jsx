@@ -12,6 +12,7 @@ export default function ClientLayout() {
     const isClient = userLocalStorage.getItem("role") == "Client";
 
     if (!isClient) {
+      userLocalStorage.remove();
       navigate("/");
     }
   }, []);
