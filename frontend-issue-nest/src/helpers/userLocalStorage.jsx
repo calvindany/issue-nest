@@ -11,6 +11,9 @@ const userLocalStorage = {
   save(user) {
     return localStorage.setItem("user", JSON.stringify(user));
   },
+  remove() {
+    return localStorage.removeItem("user");
+  },
 };
 
 export default userLocalStorage;
