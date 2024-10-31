@@ -67,15 +67,48 @@ export default function Tickets() {
   };
 
   const handleOpenModal = (type, data) => {
-    setId(data.id);
-    setTicketName(data.title);
-    setTicketDescription(data.description);
-    setTicketStatus(data.status);
-    setAdminResponse(data.admin_response);
+    if (type != "create") {
+      setId(data.id);
+      setTicketName(data.title);
+      setTicketDescription(data.description);
+      setTicketStatus(data.status);
+      setAdminResponse(data.admin_response);
+    } else {
+      setId("");
+      setTicketName("");
+      setTicketDescription("");
+      setTicketStatus("");
+      setAdminResponse("");
+    }
 
     setModalType(type);
 
     setOpen(true);
+  };
+
+  const handleSubmitCreateModal = () => {
+    const token = userLocalStorage.getItem("token");
+
+    const requestData = {
+      title: ticketName,
+      description: ticketDescription,
+      status: ticketStatus ? ticketStatus : "Open",
+    };
+
+    axios
+      .post(`${import.meta.env.VITE_API_BASE_URL}/ticket`, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.result);
+        getTicketsData();
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleSubmitEditModal = (id) => {
@@ -153,13 +186,20 @@ export default function Tickets() {
         adminResponse={adminResponse}
         setAdminResponse={setAdminResponse}
         isAdmin={!isClient}
+        isClient={isClient}
         handleSubmitEditModal={handleSubmitEditModal}
+        handleSubmitCreateModal={handleSubmitCreateModal}
       />
       <Container className="h-[100vh]">
         <Typography variant="h5">Tickets</Typography>
 
         <div className="flex justify-end mt-7 mb-4">
-          <DefaultButton variant="contained">Create</DefaultButton>
+          <DefaultButton
+            variant="contained"
+            onclick={() => handleOpenModal("create", 0)}
+          >
+            Create
+          </DefaultButton>
         </div>
         <DataTable columns={columns} rows={rows} />
       </Container>

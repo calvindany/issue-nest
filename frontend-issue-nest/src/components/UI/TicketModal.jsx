@@ -28,7 +28,9 @@ export default function TicketModal({
   adminResponse,
   setAdminResponse,
   isAdmin,
+  isClient,
   handleSubmitEditModal,
+  handleSubmitCreateModal,
 }) {
   const handleClose = () => setOpen(false);
 
@@ -81,9 +83,13 @@ export default function TicketModal({
             <TextField
               id="outlined-select-status"
               select
-              disabled={modalType == "details" || modalType == "edit"}
+              disabled={
+                modalType == "details" ||
+                modalType == "edit" ||
+                modalType == "create"
+              }
               label="Status"
-              defaultValue={ticketStatus}
+              defaultValue={ticketStatus ? ticketStatus : "Open"}
             >
               {status.map((option) => (
                 <MenuItem
@@ -96,22 +102,30 @@ export default function TicketModal({
                 </MenuItem>
               ))}
             </TextField>
-            <TextField
-              required
-              id="admin-response"
-              multiline
-              label="Admin Response"
-              disabled={modalType == "details"}
-              value={adminResponse}
-              onChange={(e) => setAdminResponse(e.target.value)}
-            />
+            {isAdmin ? (
+              <TextField
+                required
+                id="admin-response"
+                multiline
+                label="Admin Response"
+                disabled={modalType == "details"}
+                value={adminResponse}
+                onChange={(e) => setAdminResponse(e.target.value)}
+              />
+            ) : (
+              <></>
+            )}
             {modalType != "details" ? (
               <div className="flex justify-end">
                 <DefaultButton
                   variant="contained"
                   type="primary"
                   onclick={() => {
-                    handleSubmitEditModal(id);
+                    if (modalType == "edit") {
+                      handleSubmitEditModal(id);
+                    } else {
+                      handleSubmitCreateModal(id);
+                    }
                   }}
                 >
                   Submit
