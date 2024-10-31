@@ -15,11 +15,15 @@ export default function Navbar() {
     <>
       <nav className=" py-5 px-4 bg-primary-i">
         <Container className="flex justify-end">
-          <div className="flex items-center gap-4 text-white">
+          <div className="flex items-center gap-7 text-white">
             <a href={`/${isAdmin ? "admin" : "client"}/tickets`}>Tickets</a>
-            <a href={`/${isAdmin ? "admin" : "client"}/user-management`}>
-              User Management
-            </a>
+            {isAdmin ? (
+              <a href={`/${isAdmin ? "admin" : "client"}/user-management`}>
+                User Management
+              </a>
+            ) : (
+              <></>
+            )}
             <Button
               onClick={handleLogout}
               sx={{
