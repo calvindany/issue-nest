@@ -61,14 +61,6 @@ export default function Tickets() {
           >
             Edit
           </DefaultButton>
-          <DefaultButton
-            variant="contained"
-            type="primary"
-            bgColor="#FF0000"
-            onclick={() => handleSubmitDeleteModal(data.id)}
-          >
-            Delete
-          </DefaultButton>
         </div>
       </>
     );
