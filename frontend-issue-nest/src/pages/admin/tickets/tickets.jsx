@@ -181,7 +181,9 @@ export default function Tickets() {
         handleSubmitEditModal={handleSubmitEditModal}
       />
       <Container className="h-[100vh]">
-        <Typography variant="h5">Tickets</Typography>
+        <div className="mt-7 mb-4">
+          <Typography variant="h5">Tickets</Typography>
+        </div>
         <DataTable columns={columns} rows={rows} />
       </Container>
     </>
