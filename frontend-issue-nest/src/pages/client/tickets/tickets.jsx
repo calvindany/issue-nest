@@ -82,7 +82,8 @@ export default function Tickets() {
     setAdminResponse(data.admin_response);
 
     setModalType(type);
-    setOpen(!open);
+
+    setOpen(true);
   };
 
   const handleSubmitEditModal = (id) => {
@@ -103,6 +104,7 @@ export default function Tickets() {
       .then((res) => {
         console.log(res.data.result);
         getTicketsData();
+        setOpen(false);
       })
       .catch((err) => {
         console.log(err);

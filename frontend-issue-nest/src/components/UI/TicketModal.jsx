@@ -112,7 +112,6 @@ export default function TicketModal({
                   type="primary"
                   onclick={() => {
                     handleSubmitEditModal(id);
-                    handleClose();
                   }}
                 >
                   Submit
