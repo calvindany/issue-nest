@@ -29,12 +29,12 @@ CREATE TABLE tr_tickets (
 -- Step 3 Seed Dummy Data for ms_users and tr_tickets
 INSERT INTO ms_users (name, email, role, password, created_at)
 VALUES 
-('Alice Johnson', 'alice@example.com', 'Client', 'password123', DEFAULT),
-('Bob Smith', 'bob@example.com', 'Client', 'password123', DEFAULT),
-('Charlie Brown', 'bob@example.com', 'Client', 'password123', DEFAULT),
-('Dana White', 'dana@example.com', 'Client', 'password123', DEFAULT),
-('Eva Green', 'eva@example.com', 'Client', 'password123', DEFAULT),
-('Frank Knight', 'frank@example.com', 'Admin', 'password123', DEFAULT);
+('Alice Johnson', 'alice@example.com', 'Client', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT),
+('Bob Smith', 'bob@example.com', 'Client', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT),
+('Charlie Brown', 'bob@example.com', 'Client', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT),
+('Dana White', 'dana@example.com', 'Client', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT),
+('Eva Green', 'eva@example.com', 'Client', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT),
+('Frank Knight', 'frank@example.com', 'Admin', 'AQAAAAEAACcQAAAAEDl9BrUPo5xvFiaUfYZ0P2ZvHMkObNSio1q2Vq+pSvQ00lxn6lJXEYO8i3Ya3h/W9g==', DEFAULT);
 
 INSERT INTO tr_tickets (title, description, status, client_id, admin_response, created_at, updated_at)
 VALUES 
