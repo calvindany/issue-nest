@@ -1,9 +1,21 @@
+import * as React from "react";
+
 import { Container } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import { Navbar } from "../";
+import { userLocalStorage } from "../../helpers";
 
 export default function AdninLayout() {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    const isAdmin = userLocalStorage.getItem("role") == "Admin";
+
+    if (!isAdmin) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
