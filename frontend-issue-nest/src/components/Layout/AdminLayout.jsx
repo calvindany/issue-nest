@@ -23,7 +23,7 @@ export default function AdninLayout() {
 
       <Container
         maxWidth="xl"
-        className="flex flex-col min-w-[100vw] min-h-[100vh] bg-secondary-i justify-between pt-10"
+        className="flex flex-col min-h-[100vh] bg-secondary-i justify-between pt-10"
       >
         <Outlet />
       </Container>
