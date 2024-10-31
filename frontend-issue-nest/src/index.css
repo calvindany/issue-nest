@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 :root {
-    background-color: #F8F7F9;
+  background-color: #f8f7f9;
+}
+
+body {
+  font-family: "monospace", sans-serif;
 }
