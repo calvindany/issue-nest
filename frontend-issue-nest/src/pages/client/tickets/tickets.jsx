@@ -11,8 +11,8 @@ export default function Tickets() {
   const [open, setOpen] = React.useState(false);
   const [modalType, setModalType] = React.useState("add");
 
-  const [isAdmin, _] = React.useState(
-    userLocalStorage.getItem("role") == "Admin"
+  const [isClient, _] = React.useState(
+    userLocalStorage.getItem("role") == "Client"
   );
   const [id, setId] = React.useState("");
   const [ticketName, setTicketName] = React.useState("");
@@ -89,18 +89,17 @@ export default function Tickets() {
     const token = userLocalStorage.getItem("token");
 
     const requestData = {
-      admin_response: adminResponse,
+      title: ticketName,
+      description: ticketDescription,
+      status: ticketStatus,
     };
+
     axios
-      .put(
-        `${import.meta.env.VITE_API_BASE_URL}/ticket/${id}/response`,
-        requestData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .put(`${import.meta.env.VITE_API_BASE_URL}/ticket/${id}`, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         console.log(res.data.result);
         getTicketsData();
@@ -177,7 +176,7 @@ export default function Tickets() {
         setTicketStatus={setTicketStatus}
         adminResponse={adminResponse}
         setAdminResponse={setAdminResponse}
-        isAdmin={isAdmin}
+        isAdmin={!isClient}
         handleSubmitEditModal={handleSubmitEditModal}
       />
       <Container className="h-[100vh]">

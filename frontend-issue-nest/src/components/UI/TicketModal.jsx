@@ -81,7 +81,7 @@ export default function TicketModal({
             <TextField
               id="outlined-select-status"
               select
-              disabled={isAdmin || modalType == "details"}
+              disabled={modalType == "details" || modalType == "edit"}
               label="Status"
               defaultValue={ticketStatus}
             >
