@@ -103,24 +103,6 @@ export default function Tickets() {
       });
   };
 
-  const handleSubmitDeleteModal = (id) => {
-    const token = userLocalStorage.getItem("token");
-
-    axios
-      .delete(`${import.meta.env.VITE_API_BASE_URL}/ticket/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        getTicketsData();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   React.useEffect(() => {
     getTicketsData();
   }, []);
@@ -175,6 +157,10 @@ export default function Tickets() {
       />
       <Container className="h-[100vh]">
         <Typography variant="h5">Tickets</Typography>
+
+        <div className="flex justify-end mt-7 mb-4">
+          <DefaultButton variant="contained">Create</DefaultButton>
+        </div>
         <DataTable columns={columns} rows={rows} />
       </Container>
     </>
