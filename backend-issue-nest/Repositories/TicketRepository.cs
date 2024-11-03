@@ -1,4 +1,6 @@
-﻿using backend_issue_nest.Models;
+﻿using backend_issue_nest.Controllers.Helper;
+using backend_issue_nest.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 
 namespace backend_issue_nest.Repositories
@@ -103,7 +105,7 @@ namespace backend_issue_nest.Repositories
             
         }
 
-        public async Task<Ticket> CreateTicket(Ticket ticket, string user_id)
+        public async Task<Ticket> CreateTicket(ClientRequestCreateTicket ticket, string user_id)
         {
             try
             {
@@ -113,8 +115,9 @@ namespace backend_issue_nest.Repositories
                 string query = "INSERT INTO tr_tickets (title, description, status, client_id, created_at) " +
                     "VALUES " +
                     "(@title, @description, @status, @client_id, @created_at)";
+                int? insertedId = null;
 
-                using(SqlConnection connection = new SqlConnection(_connectionString))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
                     
@@ -126,9 +129,48 @@ namespace backend_issue_nest.Repositories
                         command.Parameters.AddWithValue("@client_id", user_id);
                         command.Parameters.AddWithValue("@created_at", now);
 
-                        await command.ExecuteNonQueryAsync();
+                        var result = await command.ExecuteScalarAsync();
 
-                        return ticket;
+                        if (result != null)
+                        {
+                            insertedId = Convert.ToInt32(result);
+                        }
+                    }
+
+                    if (insertedId != null)
+                    {
+                        query = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets";
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("pk_tr_tickets", insertedId);
+
+                            using ( SqlDataReader reader = command.ExecuteReader())
+                            {
+                               if(await reader.ReadAsync())
+                               {
+                                    return new Ticket
+                                    {
+                                        Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
+                                        title = GetValueOrDefault<string>(reader["title"], string.Empty),
+                                        description = GetValueOrDefault<string>(reader["description"], string.Empty),
+                                        status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                        client_id = GetValueOrDefault<int>(reader["client_id"], 0),
+                                        client_name = GetValueOrDefault<string>(reader["name"], string.Empty),
+                                        admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
+                                        created_at = GetValueOrDefault<DateTime>(reader["created_at"], DateTime.MinValue),
+                                        updated_at = GetValueOrDefault<DateTime>(reader["updated_at"], DateTime.MinValue)
+                                    };
+                               }
+
+                                return new Ticket
+                                {
+                                    title = ticket.title,
+                                    description = ticket.description,
+                                    status = ticket.status,
+                                    client_id = ticket.client_id,
+                                };
+                            }
+                        }
                     }
                 }
             }
@@ -266,6 +308,15 @@ namespace backend_issue_nest.Repositories
             {
                 throw ex;
             }
+        }
+
+        public async Task<Ticket> UpdateStatusTicket(string status)
+        {
+            ValidationHelper vh = new ValidationHelper(typeof(Constants.USER_ROLE));
+
+            vh.EnumValidation(status);
+
+            return new Ticket();
         }
 
         public async Task<int> DeleteTicket(int id)

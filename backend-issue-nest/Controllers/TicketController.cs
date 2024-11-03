@@ -95,7 +95,7 @@ namespace backend_issue_nest.Controllers
         [Authorize(Policy = "UserAuthentication")]
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> PostTicket([FromBody] ClientRequestCreateTicket ticket)
         {
             Response response = null;
             string user_id = "";
@@ -108,6 +108,12 @@ namespace backend_issue_nest.Controllers
             }
             try
             {
+                // Validate status enum
+                //ValidationHelper vh = new ValidationHelper(typeof(Constants.USER_ROLE));
+
+                //vh.EnumValidation(ticke)
+                
+                //bool isValid = vh.EnumValidation(ticket.status);
                 Ticket res = await _ticketRepository.CreateTicket(ticket, user_id);
 
                 if(res == null)
