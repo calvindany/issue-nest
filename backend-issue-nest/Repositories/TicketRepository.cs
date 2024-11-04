@@ -84,7 +84,8 @@ namespace backend_issue_nest.Repositories
                                     Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                     title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                     description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                    status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                    status  = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty) + 1),
+                                    status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                     client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                     client_name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                     admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
@@ -125,11 +126,11 @@ namespace backend_issue_nest.Repositories
                     {
                         command.Parameters.AddWithValue("@title", ticket.title);
                         command.Parameters.AddWithValue("@description", ticket.description);
-                        command.Parameters.AddWithValue("@status", ticket.status);
+                        command.Parameters.AddWithValue("@status", Constants.TICKETS_STATUS_NAME[(int)ticket.status - 1]);
                         command.Parameters.AddWithValue("@client_id", user_id);
                         command.Parameters.AddWithValue("@created_at", now);
 
-                        var result = await command.ExecuteScalarAsync();
+                        var result = await command.ExecuteNonQueryAsync();
 
                         if (result != null)
                         {
@@ -153,7 +154,8 @@ namespace backend_issue_nest.Repositories
                                         Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                         title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                         description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                        status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                        status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty) + 1),
+                                        status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                         client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                         client_name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                         admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
@@ -172,6 +174,8 @@ namespace backend_issue_nest.Repositories
                             }
                         }
                     }
+
+                    return null;
                 }
             }
             catch (Exception ex)
@@ -239,7 +243,8 @@ namespace backend_issue_nest.Repositories
                                 Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                 title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                 description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)),
+                                status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                 client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                 admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
                                 created_at = GetValueOrDefault<DateTime>(reader["created_at"], DateTime.MinValue),
@@ -292,7 +297,8 @@ namespace backend_issue_nest.Repositories
                                 Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                 title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                 description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                status = GetValueOrDefault<string>(reader["status"], string.Empty),
+                                status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)),
+                                status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                 client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                 admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),
                                 created_at = GetValueOrDefault<DateTime>(reader["created_at"], DateTime.MinValue),

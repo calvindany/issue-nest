@@ -118,7 +118,7 @@ namespace backend_issue_nest.Controllers
 
                 if(res == null)
                 {
-                    response = ResponseHelper.GenerateResponseData("You can't update other clint ticket data", StatusCodes.Status401Unauthorized, null, null);
+                    response = ResponseHelper.GenerateResponseData("Data failed to add", StatusCodes.Status500InternalServerError, null, null);
 
                     return JSONResponse(response);
                 }
