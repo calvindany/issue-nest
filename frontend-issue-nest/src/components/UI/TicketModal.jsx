@@ -72,7 +72,7 @@ export default function TicketModal({
               label="Ticket Name"
               disabled={isAdmin || modalType == "details"}
               value={ticket.title}
-              onChange={(e) => setTitle({...ticket, title: e.target.value})}
+              onChange={(e) => setTicket({...ticket, title: e.target.value})}
             />
             <TextField
               required
