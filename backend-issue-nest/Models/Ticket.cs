@@ -23,4 +23,10 @@
         public DateTime created_at { get; set; }
 
     }
+
+    public class AdminRequestResponseTicket
+    {
+        public string admin_response { get; set; }
+        public Constants.TICKET_STATUS status { get; set; }
+    }
 }

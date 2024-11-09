@@ -262,14 +262,14 @@ namespace backend_issue_nest.Repositories
             }
         }
 
-        public async Task<Ticket> UpdateResponseTicket(Ticket ticket, string user_id, string role)
+        public async Task<Ticket> UpdateResponseTicket(AdminRequestResponseTicket ticket, int ticketId)
         {
             try
             {
                 Ticket updatedTicket = null;
                 string getTickets = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets ";
                 string query = "UPDATE tr_tickets SET " +
-                    "admin_response = @admin_response, updated_at = @updated_at " +
+                    "admin_response = @admin_response, status = @status, updated_at = @updated_at " +
                     "WHERE pk_tr_tickets = @pk_tr_tickets";
 
                 using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -279,15 +279,16 @@ namespace backend_issue_nest.Repositories
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@admin_response", ticket.admin_response);
+                        cmd.Parameters.AddWithValue("@status", Constants.TICKETS_STATUS_NAME[Convert.ToInt32(ticket.status) - 1]);
                         cmd.Parameters.AddWithValue("@updated_at", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
+                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticketId);
 
                         await cmd.ExecuteNonQueryAsync();
                     }
 
                     using (SqlCommand cmd = new SqlCommand(getTickets, connection))
                     {
-                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticket.Id);
+                        cmd.Parameters.AddWithValue("@pk_tr_tickets", ticketId);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -297,7 +298,7 @@ namespace backend_issue_nest.Repositories
                                 Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                 title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                 description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)),
+                                status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)) + 1,
                                 status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                 client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                 admin_response = GetValueOrDefault<string>(reader["admin_response"], string.Empty),

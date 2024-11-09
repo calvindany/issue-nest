@@ -175,28 +175,14 @@ namespace backend_issue_nest.Controllers
         [Authorize(Policy = "AdminAuthentication")]
         [Route("{id}/response")]
         [HttpPut]
-        public async Task<IActionResult> PutTicketResponse([FromBody] Ticket ticket, int id)
+        public async Task<IActionResult> PutTicketResponse([FromBody] AdminRequestResponseTicket ticket, int id)
         {
             Response response = null;
             ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            string user_id = "";
-            string role = "";
-            if (identity != null && identity.FindFirst("id") != null)
-            {
-                user_id = identity.FindFirst("id").Value;
-            }
-
-            if (identity != null && identity.FindFirst(ClaimTypes.Role) != null)
-            {
-                role = identity.FindFirst(ClaimTypes.Role).Value;
-            }
-
             try
             {
-                ticket.Id = id;
-
-                Ticket res = await _ticketRepository.UpdateResponseTicket(ticket, user_id, role);
+                Ticket res = await _ticketRepository.UpdateResponseTicket(ticket, id);
 
                 response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
 
