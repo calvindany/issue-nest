@@ -6,6 +6,7 @@ import { Typography } from "@mui/material";
 import { DataTable, DefaultButton, TicketModal } from "../../../components";
 
 import { userLocalStorage } from "../../../helpers";
+import toast from "react-hot-toast";
 
 export default function Tickets() {
   const [rows, setRows] = React.useState([]);
@@ -14,11 +15,18 @@ export default function Tickets() {
   const isAdmin = userLocalStorage.getItem("role") == "Admin";
   
   const [modalType, setModalType] = React.useState("add");
-  const [id, setId] = React.useState("");
-  const [ticketName, setTicketName] = React.useState("");
-  const [ticketDescription, setTicketDescription] = React.useState("");
-  const [ticketStatus, setTicketStatus] = React.useState("");
-  const [adminResponse, setAdminResponse] = React.useState("");
+  const [ticket, setTicket] = React.useState({
+    id: null,
+    title: null,
+    description: null,
+    status: null,
+    response: null,
+  });
+  // const [id, setId] = React.useState("");
+  // const [ticketName, setTicketName] = React.useState("");
+  // const [ticketDescription, setTicketDescription] = React.useState("");
+  // const [ticketStatus, setTicketStatus] = React.useState("");
+  // const [adminResponse, setAdminResponse] = React.useState("");
 
   const getTicketsData = () => {
     const token = userLocalStorage.getItem("token");
@@ -103,21 +111,26 @@ export default function Tickets() {
   };
 
   const handleOpenModal = (type, data) => {
-    setId(data.id);
-    setTicketName(data.title);
-    setTicketDescription(data.description);
-    setTicketStatus(data.status);
-    setAdminResponse(data.admin_response);
+    const ticket = data;
 
+    // setId(data.id);
+    // setTicketName(data.title);
+    // setTicketDescription(data.description);
+    // setTicketStatus(data.status);
+    // setAdminResponse(data.admin_response);
+
+    setTicket(ticket);
     setModalType(type);
     setOpen(!open);
   };
 
   const handleSubmitEditModal = (id) => {
+    const loadingToast = toast.loading("Submiting data...");
     const token = userLocalStorage.getItem("token");
 
     const requestData = {
-      admin_response: adminResponse,
+      status: parseInt(ticket.status),
+      admin_response: ticket.response,
     };
     axios
       .put(
@@ -132,8 +145,16 @@ export default function Tickets() {
       .then((res) => {
         console.log(res.data.result);
         getTicketsData();
+        setOpen(false);
+
+        toast.success(`Success update ticket with id: ${id}`, {
+          id: loadingToast
+        })
       })
       .catch((err) => {
+        toast.error(`Error white updating ticket`, {
+          id: loadingToast
+        })
         console.log(err);
       });
   };
@@ -197,15 +218,17 @@ export default function Tickets() {
         open={open}
         setOpen={setOpen}
         modalType={modalType}
-        id={id}
-        ticketName={ticketName}
-        setTicketName={setTicketName}
-        ticketDescription={ticketDescription}
-        setTicketDescription={setTicketDescription}
-        ticketStatus={ticketStatus}
-        setTicketStatus={setTicketStatus}
-        adminResponse={adminResponse}
-        setAdminResponse={setAdminResponse}
+        ticket={ticket}
+        setTicket={setTicket}
+        // id={id}
+        // ticketName={ticketName}
+        // setTicketName={setTicketName}
+        // ticketDescription={ticketDescription}
+        // setTicketDescription={setTicketDescription}
+        // ticketStatus={ticketStatus}
+        // setTicketStatus={setTicketStatus}
+        // adminResponse={adminResponse}
+        // setAdminResponse={setAdminResponse}
         isAdmin={isAdmin}
         handleSubmitEditModal={handleSubmitEditModal}
       />

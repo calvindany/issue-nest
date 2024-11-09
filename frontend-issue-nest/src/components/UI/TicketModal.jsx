@@ -19,15 +19,17 @@ export default function TicketModal({
   open,
   setOpen,
   modalType,
-  id,
-  ticketName,
-  setTicketName,
-  ticketDescription,
-  setTicketDescription,
-  ticketStatus,
-  setTicketStatus,
-  adminResponse,
-  setAdminResponse,
+  // id,
+  // ticketName,
+  // setTicketName,
+  // ticketDescription,
+  // setTicketDescription,
+  // ticketStatus,
+  // setTicketStatus,
+  // adminResponse,
+  // setAdminResponse,
+  ticket,
+  setTicket,
   isAdmin,
   isClient,
   handleSubmitEditModal,
@@ -35,7 +37,7 @@ export default function TicketModal({
 }) {
   const handleClose = () => setOpen(false);
 
-  const status = [
+  const optionStatus = [
     {
       value: constants.TICKET_OPEN_STATUS.id,
       label: constants.TICKET_OPEN_STATUS.label,
@@ -69,8 +71,8 @@ export default function TicketModal({
               id="Ticket Name"
               label="Ticket Name"
               disabled={isAdmin || modalType == "details"}
-              value={ticketName}
-              onChange={(e) => setTicketName(e.target.value)}
+              value={ticket.title}
+              onChange={(e) => setTitle({...ticket, title: e.target.value})}
             />
             <TextField
               required
@@ -78,26 +80,24 @@ export default function TicketModal({
               multiline
               disabled={isAdmin || modalType == "details"}
               label="Ticket Description"
-              value={ticketDescription}
-              onChange={(e) => setTicketDescription(e.target.value)}
+              value={ticket.description}
+              onChange={(e) => setTicket({ ...ticket, description: e.target.value })}
             />
             <TextField
               id="outlined-select-status"
               select
               disabled={
-                modalType == "details" ||
-                modalType == "edit" ||
-                modalType == "create"
+                !isAdmin
               }
               label="Status"
-              defaultValue={ticketStatus ? ticketStatus : "Open"}
+              value={ticket.status}
+              onChange={(event) => setTicket({ ...ticket, status: event.target.value })}
             >
-              {status.map((option) => (
+              {optionStatus.map((option) => (
                 <MenuItem
                   key={option.value}
                   value={option.value}
-                  defaultValue={status}
-                  onChange={() => setTicketStatus(option.value)}
+                  defaultValue={ticket.status}
                 >
                   {option.label}
                 </MenuItem>
@@ -110,8 +110,8 @@ export default function TicketModal({
                 multiline
                 label="Admin Response"
                 disabled={modalType == "details"}
-                value={adminResponse}
-                onChange={(e) => setAdminResponse(e.target.value)}
+                value={ticket.response ? ticket.response : modalType == "details" ? "No Response Added Yet" : ""}
+                onChange={(e) => setTicket({ ...ticket, response: e.target.value })}
               />
             ) : (
               <></>
@@ -123,9 +123,9 @@ export default function TicketModal({
                   type="primary"
                   onclick={() => {
                     if (modalType == "edit") {
-                      handleSubmitEditModal(id);
+                      handleSubmitEditModal(ticket.id);
                     } else {
-                      handleSubmitCreateModal(id);
+                      handleSubmitCreateModal(ticket.id);
                     }
                   }}
                 >
