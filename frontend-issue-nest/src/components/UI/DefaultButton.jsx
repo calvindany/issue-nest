@@ -5,6 +5,7 @@ export default function DefaultButton({
   onclick,
   bgColor,
   children,
+  custom
 }) {
   const style = {};
 
@@ -15,7 +16,7 @@ export default function DefaultButton({
     <>
       <Button
         variant={variant}
-        sx={{ padding: "5px 25px", ...style }}
+        sx={{ padding: "5px 25px", ...style, ...custom }}
         onClick={onclick}
       >
         {children}

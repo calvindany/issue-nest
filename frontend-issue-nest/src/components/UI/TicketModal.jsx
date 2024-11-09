@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Box, Typography, Modal, TextField, MenuItem } from "@mui/material";
 import DefaultButton from "./DefaultButton";
+import * as constants from "../../constants/global";
 
 const style = {
   position: "absolute",
@@ -36,16 +37,16 @@ export default function TicketModal({
 
   const status = [
     {
-      value: "Open",
-      label: "Open",
+      value: constants.TICKET_OPEN_STATUS.id,
+      label: constants.TICKET_OPEN_STATUS.label,
     },
     {
-      value: "In Progress",
-      label: "In Progress",
+      value: constants.TICKET_IN_PROGRES_STATUS.id,
+      label: constants.TICKET_IN_PROGRES_STATUS.label,
     },
     {
-      value: "Resolved",
-      label: "Resolved",
+      value: constants.TICKET_RESOLVED_STATUS.id,
+      label: constants.TICKET_RESOLVED_STATUS.label,
     },
   ];
 
