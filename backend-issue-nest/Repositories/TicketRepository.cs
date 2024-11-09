@@ -115,8 +115,8 @@ namespace backend_issue_nest.Repositories
 
                 string query = "INSERT INTO tr_tickets (title, description, status, client_id, created_at) " +
                     "VALUES " +
-                    "(@title, @description, @status, @client_id, @created_at)";
-                int? insertedId = null;
+                    "(@title, @description, @status, @client_id, @created_at); SELECT CAST(SCOPE_IDENTITY() AS int);";
+                int insertedId = 0;
 
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
@@ -130,17 +130,13 @@ namespace backend_issue_nest.Repositories
                         command.Parameters.AddWithValue("@client_id", user_id);
                         command.Parameters.AddWithValue("@created_at", now);
 
-                        var result = await command.ExecuteNonQueryAsync();
+                        insertedId = (int)await command.ExecuteScalarAsync();
 
-                        if (result != null)
-                        {
-                            insertedId = Convert.ToInt32(result);
-                        }
                     }
 
-                    if (insertedId != null)
+                    if (insertedId != 0)
                     {
-                        query = "SELECT * FROM tr_tickets WHERE pk_tr_tickets = @pk_tr_tickets";
+                        query = "SELECT * FROM tr_tickets LEFT JOIN ms_users ON ms_users.pk_ms_user = tr_tickets.client_id WHERE pk_tr_tickets = @pk_tr_tickets";
                         using (SqlCommand command = new SqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("pk_tr_tickets", insertedId);
@@ -151,10 +147,10 @@ namespace backend_issue_nest.Repositories
                                {
                                     return new Ticket
                                     {
-                                        Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
+                                        Id = insertedId,
                                         title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                         description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                        status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty) + 1),
+                                        status = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)) + 1,
                                         status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                         client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                         client_name = GetValueOrDefault<string>(reader["name"], string.Empty),

@@ -123,7 +123,7 @@ namespace backend_issue_nest.Controllers
                     return JSONResponse(response);
                 }
 
-                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, ticket, null);
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
 
                 return JSONResponse(response);
             } 
