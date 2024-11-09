@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Toaster } from 'react-hot-toast';
 
 import { RouterProvider } from "react-router-dom";
 
@@ -15,6 +16,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <Toaster />
         <RouterProvider
           router={routers}
           // fallbackElement={<LoadingPage loading={true}/>}
