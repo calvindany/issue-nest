@@ -160,6 +160,7 @@ export default function Tickets() {
   };
 
   const handleSubmitDeleteModal = (id) => {
+    const loadingToast = toast.loading(`Deleting ticket with id: ${id}`)
     const token = userLocalStorage.getItem("token");
 
     axios
@@ -171,9 +172,17 @@ export default function Tickets() {
       .then((res) => {
         console.log(res.data);
         getTicketsData();
+
+        toast.success(`Success delete ticket with id: ${id}`, {
+          id: loadingToast
+        });
       })
       .catch((err) => {
         console.log(err);
+        
+        toast.error(`Error delete ticket with id: ${id}`, {
+          id: loadingToast
+        })
       });
   };
 
