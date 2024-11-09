@@ -25,8 +25,8 @@ namespace backend_issue_nest.Repositories
         public List<Ticket> GetTicket(string pk_tr_tickets, string user_id, string role)
         {
             List<Ticket> tickets = new List<Ticket>();
-            bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT];
-            bool isAdmin = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_ADMIN];
+            bool isClient = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_CLIENT - 1];
+            bool isAdmin = role == Constants.USER_ROLE_NAME[(int)Constants.USER_ROLE.USER_ROLE_ADMIN - 1];
 
             try
             {
@@ -84,7 +84,7 @@ namespace backend_issue_nest.Repositories
                                     Id = GetValueOrDefault<int>(reader["pk_tr_tickets"], 0),
                                     title = GetValueOrDefault<string>(reader["title"], string.Empty),
                                     description = GetValueOrDefault<string>(reader["description"], string.Empty),
-                                    status  = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty) + 1),
+                                    status  = (Constants.TICKET_STATUS)Constants.GetTicketIndex(GetValueOrDefault<string>(reader["status"], string.Empty)) + 1,
                                     status_name = GetValueOrDefault<string>(reader["status"], string.Empty),
                                     client_id = GetValueOrDefault<int>(reader["client_id"], 0),
                                     client_name = GetValueOrDefault<string>(reader["name"], string.Empty),
@@ -101,7 +101,7 @@ namespace backend_issue_nest.Repositories
                 return tickets;
             } catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             
         }
