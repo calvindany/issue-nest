@@ -9,11 +9,15 @@ Before running this project, ensure you have the following installed:
    ```bash
    git clone https://github.com/username/repo.git
    ```
-2. Install Dependencies
+2. Navigate to the project directory:
+   ```bash
+   cd frontend-issue-nest
+   ```
+3. Install Dependencies
    ```bash
    npm install
    ```
-3. Rename .env.example to .env and change the api base url value to route that api application runs
+4. Rename .env.example to .env and change the api base url value to route that api application runs
    
 5. Run Application on Development
    ```bash
@@ -36,7 +40,7 @@ Before running this project, ensure you have the following installed:
    ```
 2. Navigate to the project directory:
    ```bash
-   cd project-name
+   cd backend-issue-nest
    ```
 3. Restore NuGet packages:
    ```bash
