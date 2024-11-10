@@ -34,9 +34,16 @@ namespace backend_issue_nest.Controllers
             {
                 User loggedUser = await _authRepositories.Login(user.email, user.password);
 
-                if(loggedUser == null)
+                if (loggedUser == null)
                 {
                     response = ResponseHelper.GenerateResponseData("Username or password not valid", StatusCodes.Status401Unauthorized, null, null);
+
+                    return JSONResponse(response);
+                }
+
+                if (!loggedUser.is_active)
+                {
+                    response = ResponseHelper.GenerateResponseData("Your account is no more activated", StatusCodes.Status403Forbidden, null, null);
 
                     return JSONResponse(response);
                 }

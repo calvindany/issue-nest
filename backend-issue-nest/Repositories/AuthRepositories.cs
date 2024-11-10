@@ -45,11 +45,12 @@ namespace backend_issue_nest.Repositories
                                     name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                     email = GetValueOrDefault<string>(reader["email"], string.Empty),
                                     role = (Constants.USER_ROLE)Constants.GetUserRoleIndex(GetValueOrDefault<string>(reader["role"], string.Empty)) + 1,
-                                    role_name = Constants.USER_ROLE_NAME[Convert.ToInt32(GetValueOrDefault<string>(reader["role"], string.Empty)) - 1],
-                                    password = GetValueOrDefault<string>(reader["password"], string.Empty)
+                                    role_name = GetValueOrDefault<string>(reader["role"], string.Empty),
+                                    password = GetValueOrDefault<string>(reader["password"], string.Empty),
+                                    is_active = GetValueOrDefault<bool>(reader["is_active"], false),
                                 };
 
-                                if(loggedUser.id ==0)
+                                if(loggedUser.id == 0)
                                 {
                                     return null;
                                 }

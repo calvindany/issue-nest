@@ -1,3 +1,4 @@
+using backend_issue_nest.Models;
 using backend_issue_nest.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
@@ -51,13 +52,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("NormalAuthentication",
-         policy => policy.RequireRole("Admin", "Client"));
+         policy => policy.RequireRole(Convert.ToString(Constants.USER_ROLE.USER_ROLE_ADMIN), Convert.ToString(Constants.USER_ROLE.USER_ROLE_CLIENT)));
 
     options.AddPolicy("AdminAuthentication",
-         policy => policy.RequireRole("Admin"));
+         policy => policy.RequireRole(Convert.ToString(Constants.USER_ROLE.USER_ROLE_ADMIN)));
 
     options.AddPolicy("UserAuthentication",
-         policy => policy.RequireRole("Client"));
+         policy => policy.RequireRole(Convert.ToString(Constants.USER_ROLE.USER_ROLE_CLIENT)));
 });
 
 var app = builder.Build();
