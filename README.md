@@ -64,6 +64,17 @@ dotnet run
 issue-nest\backend-issue-nest\postman_collection.json
 ```
 
+#### Available Default Account
+Admin
+```bash
+email: "frank@example.com"
+password: "password"
+```
+Client
+```bash
+email: "eva@example.com"
+password: "password"
+```
 
 
 
