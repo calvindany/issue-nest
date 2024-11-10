@@ -9,6 +9,7 @@ CREATE TABLE ms_users (
 	email VARCHAR(60) NOT NULL,
 	role VARCHAR(20) CHECK (role IN ('Admin', 'Client')) NOT NULL,
 	password TEXT NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT 1,
 	
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
