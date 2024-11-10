@@ -22,11 +22,6 @@ export default function Tickets() {
     status: null,
     admin_response: null
   });
-  // const [id, setId] = React.useState("");
-  // const [ticketName, setTicketName] = React.useState("");
-  // const [ticketDescription, setTicketDescription] = React.useState("");
-  // const [ticketStatus, setTicketStatus] = React.useState("");
-  // const [adminResponse, setAdminResponse] = React.useState("");
 
   const getTicketsData = () => {
     const token = userLocalStorage.getItem("token");
@@ -113,12 +108,6 @@ export default function Tickets() {
   const handleOpenModal = (type, data) => {
     const ticket = data;
 
-    // setId(data.id);
-    // setTicketName(data.title);
-    // setTicketDescription(data.description);
-    // setTicketStatus(data.status);
-    // setAdminResponse(data.admin_response);
-
     setTicket(ticket);
     setModalType(type);
     setOpen(true);
@@ -193,11 +182,6 @@ export default function Tickets() {
   const columns = [
     { id: "id", label: "Ticket Id", minWidth: 100, align: "center" },
     { id: "title", label: "Title", minWidth: 170 },
-    // {
-    //   id: "description",
-    //   label: "Description",
-    //   minWidth: 170,
-    // },
     {
       id: "status_name",
       label: "Status",
@@ -229,15 +213,6 @@ export default function Tickets() {
         modalType={modalType}
         ticket={ticket}
         setTicket={setTicket}
-        // id={id}
-        // ticketName={ticketName}
-        // setTicketName={setTicketName}
-        // ticketDescription={ticketDescription}
-        // setTicketDescription={setTicketDescription}
-        // ticketStatus={ticketStatus}
-        // setTicketStatus={setTicketStatus}
-        // adminResponse={adminResponse}
-        // setAdminResponse={setAdminResponse}
         isAdmin={isAdmin}
         handleSubmitEditModal={handleSubmitEditModal}
       />

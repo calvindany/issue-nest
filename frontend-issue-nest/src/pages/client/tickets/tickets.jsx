@@ -30,12 +30,6 @@ export default function Tickets() {
     console.log(ticket)
   }, [ticket])
 
-  // const [id, setId] = React.useState("");
-  // const [ticketName, setTicketName] = React.useState("");
-  // const [ticketDescription, setTicketDescription] = React.useState("");
-  // const [ticketStatus, setTicketStatus] = React.useState("");
-  // const [adminResponse, setAdminResponse] = React.useState("");
-
   const getTicketsData = () => {
     const token = userLocalStorage.getItem("token");
     axios
@@ -104,11 +98,6 @@ export default function Tickets() {
   const handleOpenModal = (type, data) => {
     if (type != "create") {
       setTicket(data)
-      // setId(data.id);
-      // setTicketName(data.title);
-      // setTicketDescription(data.description);
-      // setTicketStatus(data.status);
-      // setAdminResponse(data.admin_response);
     } else {
       data = {
         id: null,
@@ -119,11 +108,6 @@ export default function Tickets() {
       }
 
       setTicket(data)
-      // setId("");
-      // setTicketName("");
-      // setTicketDescription("");
-      // setTicketStatus("");
-      // setAdminResponse("");
     }
 
     setModalType(type);
@@ -196,11 +180,6 @@ export default function Tickets() {
   const columns = [
     { id: "id", label: "Ticket Id", minWidth: 100, align: "center" },
     { id: "title", label: "Title", minWidth: 170 },
-    // {
-    //   id: "description",
-    //   label: "Description",
-    //   minWidth: 170,
-    // },
     {
       id: "status_name",
       label: "Status",
@@ -231,15 +210,6 @@ export default function Tickets() {
         modalType={modalType}
         ticket={ticket}
         setTicket={setTicket}
-        // id={id}
-        // ticketName={ticketName}
-        // setTicketName={setTicketName}
-        // ticketDescription={ticketDescription}
-        // setTicketDescription={setTicketDescription}
-        // ticketStatus={ticketStatus}
-        // setTicketStatus={setTicketStatus}
-        // adminResponse={adminResponse}
-        // setAdminResponse={setAdminResponse}
         isAdmin={!isClient}
         isClient={isClient}
         handleSubmitEditModal={handleSubmitEditModal}
