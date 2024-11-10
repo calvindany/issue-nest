@@ -54,7 +54,9 @@ export default function DataTable({ columns, rows }) {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
+                            { typeof value === "boolean" && column.format == "is_active"
+                              ? value ? "Active" : "In Active" 
+                              : column.format && typeof value === "number"
                               ? column.format(value)
                               : value}
                           </TableCell>

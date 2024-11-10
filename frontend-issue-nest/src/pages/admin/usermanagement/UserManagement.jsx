@@ -12,6 +12,7 @@ export default function UserManagement() {
     email: null,
     role: null,
     password: null,
+    is_active: false,
   });
   React.useEffect(() => {
     console.log(user)
@@ -67,6 +68,27 @@ export default function UserManagement() {
     })
   }
 
+  const handleUpdateUserStatus = (id, new_status) => {
+    const token = userLocalStorage.getItem("token");
+    const requestData = {
+      is_active: !new_status,
+    }
+    axios.put(`${import.meta.env.VITE_API_BASE_URL}/user/${id}/status`, requestData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      getUserManagement();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   React.useEffect(() => {
     getUserManagement()
   }, [])
@@ -76,25 +98,27 @@ export default function UserManagement() {
     { id: "name", label: "Fullname", minWidth: 170},
     { id: "email", label: "Email", minWidth: 170},
     { id: "role_name", label: "Role", minWidth: 100},
+    { id: "is_active", label: "Active Status", minWidth: 100, align: "center", format: "is_active"},
     { id: "action", label: "Action"}
   ]
 
-  const RenderActionItem = ({  }) => {
+  const RenderActionItem = ({ data }) => {
     return (
       <>
         <div className="flex gap-2">
           <DefaultButton
             variant="contained"
             type="primary"
-            bgColor="#FF0000"
+            bgColor= { data.is_active ? "#FF0000" : "#4CAF50" }
             custom={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               gap: "10px"
             }}
+            onclick={() => { handleUpdateUserStatus(data.id, data.is_active) }}
           >
-            Disable User
+            { data.is_active ? "Disable" : "Enable" } User
           </DefaultButton>
         </div>
       </>
