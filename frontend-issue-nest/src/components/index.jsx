@@ -7,3 +7,4 @@ export { default as DefaultButton } from "./UI/DefaultButton";
 export { default as Navbar } from "./UI/Navbar";
 export { default as DataTable } from "./UI/DataTable";
 export { default as TicketModal } from "./UI/TicketModal";
+export { default as UserModal } from "./UI/UserModal";

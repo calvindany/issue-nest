@@ -245,7 +245,7 @@ export default function Tickets() {
         handleSubmitEditModal={handleSubmitEditModal}
         handleSubmitCreateModal={handleSubmitCreateModal}
       />
-      <div className="100%">
+      <div className="h-[100%]">
         <Typography variant="h5">Tickets</Typography>
 
         <div className="flex justify-end mt-7 mb-4">

@@ -38,6 +38,13 @@ const routers = createBrowserRouter([
               return { Component: Tickets };
             },
           },
+          {
+            path: "user-management",
+            async lazy() {
+              const { UserManagement } = await import("../pages/admin");
+              return { Component: UserManagement };
+            },
+          },
         ],
       },
     ],
