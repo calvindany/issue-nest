@@ -87,7 +87,7 @@ export default function TicketModal({
               id="outlined-select-status"
               select
               disabled={
-                !isAdmin
+                modalType == "details" ? true : !isAdmin
               }
               label="Status"
               value={ticket.status}
@@ -110,8 +110,8 @@ export default function TicketModal({
                 multiline
                 label="Admin Response"
                 disabled={modalType == "details"}
-                value={ticket.response ? ticket.response : modalType == "details" ? "No Response Added Yet" : ""}
-                onChange={(e) => setTicket({ ...ticket, response: e.target.value })}
+                value={ticket.admin_response ? ticket.admin_response : modalType == "details" ? "No Response Added Yet" : ""}
+                onChange={(e) => setTicket({ ...ticket, admin_response: e.target.value })}
               />
             ) : (
               <></>

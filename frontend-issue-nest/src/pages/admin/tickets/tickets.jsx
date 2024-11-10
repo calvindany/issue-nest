@@ -12,7 +12,7 @@ export default function Tickets() {
   const [rows, setRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   
-  const isAdmin = userLocalStorage.getItem("role") == "Admin";
+  const isAdmin = userLocalStorage.getItem("role_name") == "Admin";
   
   const [modalType, setModalType] = React.useState("add");
   const [ticket, setTicket] = React.useState({
@@ -20,7 +20,7 @@ export default function Tickets() {
     title: null,
     description: null,
     status: null,
-    response: null,
+    admin_response: null
   });
   // const [id, setId] = React.useState("");
   // const [ticketName, setTicketName] = React.useState("");
@@ -121,7 +121,7 @@ export default function Tickets() {
 
     setTicket(ticket);
     setModalType(type);
-    setOpen(!open);
+    setOpen(true);
   };
 
   const handleSubmitEditModal = (id) => {
@@ -130,7 +130,7 @@ export default function Tickets() {
 
     const requestData = {
       status: parseInt(ticket.status),
-      admin_response: ticket.response,
+      admin_response: ticket.admin_response,
     };
     axios
       .put(
