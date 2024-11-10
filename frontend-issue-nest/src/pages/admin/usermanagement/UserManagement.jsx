@@ -75,7 +75,7 @@ export default function UserManagement() {
     { id: "id", label: "User Id", minWidth: 100, align: "center"},
     { id: "name", label: "Fullname", minWidth: 170},
     { id: "email", label: "Email", minWidth: 170},
-    { id: "role", label: "Role", minWidth: 100},
+    { id: "role_name", label: "Role", minWidth: 100},
     { id: "action", label: "Action"}
   ]
 
@@ -112,7 +112,7 @@ export default function UserManagement() {
       />
       <div className="h-[100%]">
         <div className="flex justify-between mt-7 mb-4">
-          <Typography variant="h5">Tickets</Typography>
+          <Typography variant="h5">User Management</Typography>
           <DefaultButton
             variant="contained"
             onclick={() => setOpen(true)}
