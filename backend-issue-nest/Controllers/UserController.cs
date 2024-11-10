@@ -72,6 +72,35 @@ namespace backend_issue_nest.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminAuthentication")]
+        [Route("{id}/status")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserStatus([FromBody] AdminUpdateUserStatusRequest req, int id)
+        {
+            Response response = null;
+
+            try
+            {
+                User res = await _userRepositories.UpdateUserAccountStatus(id, req.is_active);
+
+                if (res == null)
+                {
+                    response = ResponseHelper.GenerateResponseData("Failed Update Data", StatusCodes.Status404NotFound, null, null);
+                    return JSONResponse(response);
+                }
+
+                response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
+
+                return JSONResponse(response);
+            }
+            catch (Exception ex)
+            {
+                response = ResponseHelper.GenerateResponseData("Internal Server Error", StatusCodes.Status500InternalServerError, null, ex);
+
+                return JSONResponse(response);
+            }
+        }
+
         private IActionResult JSONResponse(Response responseData)
         {
             if (responseData.status_code != 200)

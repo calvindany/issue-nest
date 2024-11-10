@@ -8,6 +8,7 @@
         public Constants.USER_ROLE role { get; set; }
         public string role_name { get; set; }
         public string password { get; set; }
+        public bool is_active { get; set; }
         public DateTime created_at { get; set; }
     }
 
@@ -34,5 +35,10 @@
         public string email { get; set; }
         public Constants.USER_ROLE role { get; set; }
         public string password { get; set; }
+    }
+
+    public class AdminUpdateUserStatusRequest
+    {
+        public bool is_active { get; set; }
     }
 }

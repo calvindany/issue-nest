@@ -70,7 +70,8 @@ namespace backend_issue_nest.Repositories
                                 name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                 email = GetValueOrDefault<string>(reader["email"], string.Empty),
                                 role = (Constants.USER_ROLE)Constants.GetUserRoleIndex(GetValueOrDefault<string>(reader["role"], string.Empty)) + 1,
-                                role_name = GetValueOrDefault<string>(reader["role"], string.Empty)
+                                role_name = GetValueOrDefault<string>(reader["role"], string.Empty),
+                                is_active = GetValueOrDefault<bool>(reader["is_active"], false)
                             });
                         }
 
@@ -124,6 +125,61 @@ namespace backend_issue_nest.Repositories
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        public async Task<User> UpdateUserAccountStatus(int user_id, bool new_status)
+        {
+            int updatedRow = 0;
+            try
+            {
+                string query = "UPDATE ms_users SET is_active = @new_status_value WHERE pk_ms_user = @pk_ms_user";
+
+                using(SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand command = new SqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@new_status_value", new_status);
+                        command.Parameters.AddWithValue("@pk_ms_user", user_id);
+
+                        updatedRow = await command.ExecuteNonQueryAsync();
+
+
+                        if (updatedRow == 0) 
+                        {
+                            return null;
+                        }
+                    }
+
+                    query = "SELECT * FROM ms_users WHERE pk_ms_user = @pk_ms_user";
+                    using (SqlCommand command = new SqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@pk_ms_user", user_id);
+
+                        using(SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                return new User
+                                {
+                                    id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
+                                    name = GetValueOrDefault<string>(reader["name"], string.Empty),
+                                    email = GetValueOrDefault<string>(reader["email"], string.Empty),
+                                    role = (Constants.USER_ROLE)Constants.GetUserRoleIndex(GetValueOrDefault<string>(reader["role"], string.Empty)) + 1,
+                                    role_name = GetValueOrDefault<string>(reader["role"], string.Empty),
+                                    is_active = GetValueOrDefault<bool>(reader["is_active"], false)
+                                };
+                            }
+
+                            return null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
