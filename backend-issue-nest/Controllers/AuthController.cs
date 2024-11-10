@@ -48,8 +48,8 @@ namespace backend_issue_nest.Controllers
                     new Claim("id", loggedUser.id.ToString()),
                     new Claim("email", loggedUser.email),
                     new Claim("name", loggedUser.name),
-                    new Claim("role", loggedUser.role),
-                    new Claim("role2", loggedUser.role),
+                    new Claim("role", Convert.ToString(loggedUser.role)),
+                    new Claim("role_name", loggedUser.role_name),
                 };
 
                 SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -65,6 +65,7 @@ namespace backend_issue_nest.Controllers
                     id = loggedUser.id,
                     name = loggedUser.name,
                     role = loggedUser.role,
+                    role_name = loggedUser.role_name,
                     email = loggedUser.email,
                     token = generatedToken,
                 };

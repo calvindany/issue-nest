@@ -12,11 +12,16 @@ namespace backend_issue_nest.Models
             USER_ROLE_CLIENT = 2,
         }
 
+        public static int GetUserRoleIndex(string roleName)
+        {
+            return Array.IndexOf(USER_ROLE_NAME, roleName);
+        }
+
         public static readonly string[] TICKETS_STATUS_NAME = new string[] { "Open", "In Progress", "Resolved" };
 
-        public static int GetTicketIndex(string roleName)
+        public static int GetTicketIndex(string ticketStatus)
         {
-            return Array.IndexOf(TICKETS_STATUS_NAME, roleName);
+            return Array.IndexOf(TICKETS_STATUS_NAME, ticketStatus);
         }
 
         public enum TICKET_STATUS

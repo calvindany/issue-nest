@@ -5,7 +5,8 @@
         public int id { get; set; }
         public string name { get; set; }
         public string email { get; set; }
-        public string role { get; set; }
+        public Constants.USER_ROLE role { get; set; }
+        public string role_name { get; set; }
         public string password { get; set; }
         public DateTime created_at { get; set; }
     }
@@ -22,7 +23,16 @@
         public int id { get; set; }
         public string name { get; set; }
         public string email { get; set; }
-        public string role { get; set; }
+        public Constants.USER_ROLE role { get; set; }
+        public string role_name { get; set; }
         public string token {  get; set; }
+    }
+
+    public class AdminCreateUserRequest
+    {
+        public string name { get; set; }
+        public string email { get; set; }
+        public Constants.USER_ROLE role { get; set; }
+        public string password { get; set; }
     }
 }

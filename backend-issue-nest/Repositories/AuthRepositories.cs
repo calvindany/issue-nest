@@ -44,7 +44,8 @@ namespace backend_issue_nest.Repositories
                                     id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
                                     name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                     email = GetValueOrDefault<string>(reader["email"], string.Empty),
-                                    role = GetValueOrDefault<string>(reader["role"], string.Empty),
+                                    role = (Constants.USER_ROLE)Constants.GetUserRoleIndex(GetValueOrDefault<string>(reader["role"], string.Empty)) + 1,
+                                    role_name = Constants.USER_ROLE_NAME[Convert.ToInt32(GetValueOrDefault<string>(reader["role"], string.Empty)) - 1],
                                     password = GetValueOrDefault<string>(reader["password"], string.Empty)
                                 };
 

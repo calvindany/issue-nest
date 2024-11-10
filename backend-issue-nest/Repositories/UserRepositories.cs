@@ -69,7 +69,8 @@ namespace backend_issue_nest.Repositories
                                 id = GetValueOrDefault<int>(reader["pk_ms_user"], 0),
                                 name = GetValueOrDefault<string>(reader["name"], string.Empty),
                                 email = GetValueOrDefault<string>(reader["email"], string.Empty),
-                                role = GetValueOrDefault<string>(reader["role"], string.Empty)
+                                role = (Constants.USER_ROLE)Constants.GetUserRoleIndex(GetValueOrDefault<string>(reader["role"], string.Empty)) + 1,
+                                role_name = GetValueOrDefault<string>(reader["role"], string.Empty)
                             });
                         }
 
@@ -79,7 +80,7 @@ namespace backend_issue_nest.Repositories
             }
         }
         
-        public async Task<string> CreateUser(User user)
+        public async Task<string> CreateUser(AdminCreateUserRequest user)
         {
             string query = "INSERT INTO ms_users (name, email, role, password) VALUES (@name, @email, @role, @password);";
             string searchForExistedEmail = "SELECT COUNT(*) FROM ms_users WHERE email = @email";
@@ -110,7 +111,7 @@ namespace backend_issue_nest.Repositories
 
                         command.Parameters.AddWithValue("@name", user.name);
                         command.Parameters.AddWithValue("@email", user.email);
-                        command.Parameters.AddWithValue("@role", user.role);
+                        command.Parameters.AddWithValue("@role", Constants.USER_ROLE_NAME[(int)user.role - 1]);
                         command.Parameters.AddWithValue("@password", hashedPassword);
 
                         await command.ExecuteNonQueryAsync();
