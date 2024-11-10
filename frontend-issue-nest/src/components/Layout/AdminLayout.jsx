@@ -9,7 +9,7 @@ import { userLocalStorage } from "../../helpers";
 export default function AdninLayout() {
   const navigate = useNavigate();
   React.useEffect(() => {
-    const isAdmin = userLocalStorage.getItem("role") == "Admin";
+    const isAdmin = userLocalStorage.getItem("role_name") == "Admin";
 
     if (!isAdmin) {
       userLocalStorage.remove();

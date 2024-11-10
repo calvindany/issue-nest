@@ -6,7 +6,7 @@ import { userLocalStorage } from "../../helpers";
 export default function Navbar() {
   const navigate = useNavigate();
 
-  const isAdmin = userLocalStorage.getItem("role") == "Admin";
+  const isAdmin = userLocalStorage.getItem("role_name") == "Admin";
   const handleLogout = () => {
     userLocalStorage.remove();
     navigate("/");

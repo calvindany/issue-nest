@@ -9,7 +9,7 @@ import { userLocalStorage } from "../../helpers";
 export default function ClientLayout() {
   const navigate = useNavigate();
   React.useEffect(() => {
-    const isClient = userLocalStorage.getItem("role") == "Client";
+    const isClient = userLocalStorage.getItem("role_name") == "Client";
 
     if (!isClient) {
       userLocalStorage.remove();

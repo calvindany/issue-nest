@@ -41,9 +41,9 @@ export default function Login() {
         userLocalStorage.save(data);
 
         setTimeout(() => {
-          if (data.role == "Admin") {
+          if (data.role_name == "Admin") {
             navigate("/admin/tickets");
-          } else if (data.role == "Client") {
+          } else if (data.role_name == "Client") {
             navigate("/client/tickets");
           }
         }, 2000)
