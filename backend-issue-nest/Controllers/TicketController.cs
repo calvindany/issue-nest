@@ -138,7 +138,7 @@ namespace backend_issue_nest.Controllers
         [Authorize(Policy = "UserAuthentication")]
         [Route("{id}")]
         [HttpPut]
-        public async Task<IActionResult> PutTicket([FromBody] Ticket ticket, int id)
+        public async Task<IActionResult> PutTicket([FromBody] ClientRequestCreateTicket ticket, int id)
         {
             Response response = null;
             ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -157,9 +157,7 @@ namespace backend_issue_nest.Controllers
 
             try
             {
-                ticket.Id = id;
-
-                Ticket res = await _ticketRepository.UpdateTicket(ticket, user_id, role);
+                Ticket res = await _ticketRepository.UpdateTicket(ticket, id, user_id, role);
 
                 response = ResponseHelper.GenerateResponseData("Success", StatusCodes.Status200OK, res, null);
 
