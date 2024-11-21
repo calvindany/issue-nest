@@ -1,0 +1,6 @@
+@backend_issue_nest_v2_HostAddress = http://localhost:5041
+
+GET {{backend_issue_nest_v2_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
