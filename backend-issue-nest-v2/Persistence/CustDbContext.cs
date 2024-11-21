@@ -7,7 +7,7 @@ namespace backend_issue_nest_v2.Persistence
     public class CustDbContext(DbContextOptions<CustDbContext> options) : DbContext(options)
     {
         public  DbSet<Ticket> Tickets { get; set; }
-        public DbSet<User> User { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
