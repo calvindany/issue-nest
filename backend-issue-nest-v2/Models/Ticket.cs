@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend_issue_nest.Models
+namespace backend_issue_nest_v2.Models
 {
     public class Ticket
     {
